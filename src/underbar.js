@@ -99,6 +99,15 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var obj = {};
+    _.each(array, function(value){
+      obj[value] = true;
+    });
+    var arr = Object.keys(obj);
+    for(var i = 0; i < arr.length; i++){
+      arr[i] = parseInt(arr[i]);
+    }
+    return arr;
   };
 
 
