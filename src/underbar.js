@@ -303,15 +303,14 @@
   // instead if possible.
   _.memoize = function(func) {
     var storage = {};
-  
+
    return function(){
-  
-    if(storage[arguments] != undefined){
-      var result = storage[arguments];
+    if(storage[arguments[0]] != undefined){
+      var result = storage[arguments[0]];
       return result;
     } else {
-      storage[arguments] = func.apply(this,arguments);
-      return storage[arguments];
+      storage[arguments[0]] = func.apply(this,arguments);
+      return storage[arguments[0]];
     } 
    }
   
