@@ -215,7 +215,7 @@
     var fun = function(){
       return iterator === undefined ? _.identity : iterator;
     }();
-    
+
     return !_.every(collection, function(value){ return !fun(value); });
 
     
@@ -241,6 +241,13 @@
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
   _.extend = function(obj) {
+    var newObj = {};
+    for(var i = 0; i < arguments.length; i++){
+      _.each(arguments[i], function(value, key){
+        obj[key] = value;
+      });
+    }
+    return obj;
   };
 
   // Like extend, but doesn't ever overwrite a key that already
