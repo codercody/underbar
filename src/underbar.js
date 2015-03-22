@@ -355,6 +355,7 @@
       function randomIntFromInterval(min,max){
         return Math.floor(Math.random()*(max-min+1)+min);
       }
+     
       return arr;
   };
 
@@ -370,6 +371,16 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    if(typeof(functionOrKey) === 'function'){
+      var arr = _.map(collection, function(value){
+        return functionOrKey.apply(value, args);
+      });
+    } else {
+      var arr = _.map(collection, function(value){
+        return collection[functionOrKey].apply(value, args)
+      });
+    }
+    return arr;
   };
 
   // Sort the object's values by a criterion produced by an iterator.
