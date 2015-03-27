@@ -327,7 +327,13 @@
       for (var i = 2; i < arguments.length; i++){
         arr.push(arguments[i]);
       }
-      return setTimeout((func.apply(this, arr)), wait);
+      function partial(fun) {
+          return function() {
+            return fun.apply(this, arr);
+          };
+      }
+
+      return setTimeout(partial(func, arr), wait);
   };
 
 
@@ -416,6 +422,7 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
