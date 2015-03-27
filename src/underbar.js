@@ -371,13 +371,14 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    var arr;
     if(typeof(functionOrKey) === 'function'){
-      var arr = _.map(collection, function(value){
+      arr = _.map(collection, function(value){
         return functionOrKey.apply(value, args);
       });
     } else {
-      var arr = _.map(collection, function(value){
-        return collection[functionOrKey].apply(value, args)
+      arr = _.map(collection, function(value){
+        return value[functionOrKey].apply(value, args);
       });
     }
     return arr;
