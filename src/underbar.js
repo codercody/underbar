@@ -347,21 +347,20 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
-  _.shuffle = function(array) {
-    var arr = array.slice();
-    var temp;
-
-      _.each(arr, function(item, index){
-          var replacement = randomIntFromInterval(0, arr.length - 1);
-          temp = arr[replacement];
-          arr[replacement] = arr[index];
-          arr[index] = temp;
-      });
-
-      function randomIntFromInterval(min,max){
-        return Math.floor(Math.random()*(max-min+1)+min);
+   _.shuffle = function(array) {
+      function randomizer(min, max){
+        return Math.floor(Math.random() * (max - min + 1) + min);
       }
-     
+
+      var arr = array.slice();
+      var temp;
+
+      for(var i = 0; i < arr.length; i++){
+        var randomInt = randomizer(0, arr.length - 1);
+        temp = arr[randomInt];
+        arr[randomInt] = arr[i];
+        arr[i] = temp;
+      }
       return arr;
   };
 
@@ -395,12 +394,34 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
-    var criterion = function(){
-      return typeof(iterator) === 'function' ? iterator() : iterator;
-    }();
 
-    
+    var arr = [];
+    var sorted = [];
+    if(typeof(iterator) === 'function'){
+        _.each(collection, function(object){
+          arr.push(iterator(object));
+        });
 
+    arr.sort(function(a, b){ return a - b });
+
+     for(var i = 0; i < arr.length; i++){
+        var once = false;
+        _.each(collection, function(object){
+          if(arr[i] == iterator(object) && once === false){
+            sorted.push(object);
+            once = true;
+          }
+        });
+      }
+    } else {
+        _.each(collection, function(value){
+          arr.push(value);
+        });
+
+        arr.sort(function(a,b){ return a[iterator] - b[iterator]; });
+        sorted = arr;
+    }
+    return sorted;
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -427,8 +448,19 @@
   // The new array should contain all elements of the multidimensional array.
   //
   // Hint: Use Array.isArray to check if something is an array
-  _.flatten = function(nestedArray, result) {
-
+  _.flatten = function(nestedArray) {
+    var arr = [];
+    function recursor(array){
+      for(var i = 0; i < array.length; i++){
+        if(Array.isArray(array[i])){
+          recursor(array[i]);
+        } else {
+          arr.push(array[i])
+        }
+      }
+    }
+    recursor(nestedArray);
+    return arr;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
