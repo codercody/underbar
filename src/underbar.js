@@ -466,6 +466,23 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+        var tempArr = [true], arr = [];
+        
+        for(var i = 0; i < arguments[0].length; i++){
+            for(var j = 1; j < arguments.length; j++){
+                for(var k = 0; k < arguments[j].length; k++){
+                    if(arguments[0][i] === arguments[j][k]){
+                        tempArr.push(true);
+                    }
+                }
+            }
+            
+            if(tempArr.length === arguments.length){
+                arr.push(arguments[0][i]);
+            }
+            tempArr = [true];
+        }
+        return arr;
   };
 
   // Take the difference between one array and a number of other arrays.
