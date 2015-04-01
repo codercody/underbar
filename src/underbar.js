@@ -393,32 +393,25 @@
   // If iterator is a string, sort objects by that property with the name
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
-  _.sortBy = function(collection, iterator) {
+    _.sortBy = function(collection, iterator) {
 
-    var arr = [];
-    var sorted = [];
-    if(typeof(iterator) === 'function'){
-        _.each(collection, function(object){
-          arr.push(iterator(object));
-        });
-
-    arr.sort(function(a, b){ return a - b });
-
-     for(var i = 0; i < arr.length; i++){
-        _.each(collection, function(object){
-          if(arr[i] == iterator(object) && !_.contains(sorted, object)){
-            sorted.push(object);
-          }
-        });
-      }
-    } else {
-        _.each(collection, function(value){
-          arr.push(value);
-        });
-
-        arr.sort(function(a,b){ return a[iterator] - b[iterator]; });
-        sorted = arr;
+    var sorted = collection;
+    if(typeof(iterator) === 'string'){
+        var method = iterator;
+        iterator = function(element){
+          return element[method];
+        }
     }
+
+    sorted.sort(function(a,b){
+      if(iterator(a) < iterator(b)){
+        return -1;
+      } else if(iterator(a) > iterator(b)){
+        return 1;
+      } else {
+        return 0;
+      }
+    });
     return sorted;
   };
 
@@ -520,12 +513,7 @@
 
         if(diff > 0){
             startFunc = _.delay(futureFunc, diff);
-        } else {
-            startFunc = undefined;
-            pastTime = presentTime;
-            modified = func.apply(this, arguments);
-        }
-        return modified;
+        } 
     }
 
     function futureFunc(){
