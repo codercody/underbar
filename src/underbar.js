@@ -507,5 +507,33 @@
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
+    var pastTime = 0;
+    var startFunc = undefined;
+    var modified;
+
+    return function(){
+        var presentTime = Date.now();
+
+        if(!pastTime){
+            pastTime = presentTime;
+        }
+
+        var diff = presentTime + wait - pastTime;
+
+        if(diff > 0){
+            startFunc = _.delay(futureFunc, diff);
+        } else {
+            startFunc = undefined;
+            pastTime = presentTime;
+            modified = func.apply(this, arguments);
+        }
+        return modified;
+    }
+
+    function futureFunc(){
+        startFunc = undefined;
+        modified = func.apply(this, arguments);
+    }
+
   };
 }());
