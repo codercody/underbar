@@ -405,11 +405,9 @@
     arr.sort(function(a, b){ return a - b });
 
      for(var i = 0; i < arr.length; i++){
-        var once = false;
         _.each(collection, function(object){
-          if(arr[i] == iterator(object) && once === false){
+          if(arr[i] == iterator(object) && !_.contains(sorted, object)){
             sorted.push(object);
-            once = true;
           }
         });
       }
